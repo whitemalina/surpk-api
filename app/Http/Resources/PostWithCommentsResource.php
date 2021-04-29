@@ -16,11 +16,12 @@ class PostWithCommentsResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
+            'sp' => $this->sp,
+            'cab' => $this->cab,
+            'status' => $this->status,
             'text' => $this->text,
-            'image' => $this->image,
             'user' => $this->user->name,
-            'comments' => CommentsResource::collection($this->comments),
+//            'comments' => CommentsResource::collection($this->comments),
             'created_at' => $this->created_at,
         ];
     }

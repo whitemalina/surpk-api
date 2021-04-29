@@ -39,10 +39,7 @@ class PostController extends Controller
      */
     public function store(PostStoreRequest $request)
     {
-        $data = $request->only(['text', 'name']);
-
-        if($request->image)
-            $data['image'] = $request->image->store('/', 'public');
+        $data = $request->only(['text', 'sp',"cab"]);
 
         return Auth::user()->posts()->create($data);
     }
@@ -65,9 +62,15 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(Post $post,Request $request)
     {
-        //
+        $user = Auth::user();
+        if (isset($user)) {
+            $post->update($request->only('status'));
+            return response($post,202);
+        }
+        return response($user,400);
+
     }
 
     /**
@@ -78,6 +81,11 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $user = Auth::user();
+        if (isset($user)) {
+            $post->delete();
+            return response($post,202);
+        }
+        return response($user,400);
     }
 }

@@ -9,12 +9,8 @@ class Post extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'text', 'image'];
+    protected $fillable = ['sp', 'text','cab','status'];
 
-    public function getImageAttribute()
-    {
-        return url('/storage/' . $this->attributes['image']);
-    }
 
     public function user()
     {
