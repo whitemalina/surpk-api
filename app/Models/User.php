@@ -47,6 +47,22 @@ class User extends Authenticatable
         $this->api_token = Str::random(36);
         $this->save();
     }
+    public function IsAdmin()
+    {
+        if ($this->IsAdmin) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function IsCreator($post){
+        if ($this->id == $post->user_id) {
+            return true;
+        }else {
+            return false;
+        }
+
+    }
 
     public function posts()
     {
