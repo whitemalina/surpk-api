@@ -13,7 +13,7 @@ class PostController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api')->only(['userPosts', 'store', 'update', 'destroy']);
+        $this->middleware('auth:api')->only(['userPosts', 'store', 'update', 'destroy', 'index']);
     }
 
     public function userPosts()
@@ -28,7 +28,14 @@ class PostController extends Controller
      */
     public function index()
     {
-        return PostResource::collection(Post::all());
+        $user = Auth::user();
+        if (isset($user)) {
+            if ($user->IsAdmin()) {
+                return PostResource::collection(Post::all());
+            } else {
+                return PostResource::collection(Auth::user()->posts);
+            }
+        } return PostResource::collection(Post::all());
     }
 
     /**
@@ -39,9 +46,10 @@ class PostController extends Controller
      */
     public function store(PostStoreRequest $request)
     {
-        $data = $request->only(['text', 'sp',"cab"]);
+            $data = $request->only(['text', 'sp',"cab"]);
 
-        return Auth::user()->posts()->create($data);
+            return Auth::user()->posts()->create($data);
+
     }
 
     /**
@@ -77,15 +85,20 @@ class PostController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
     public function destroy(Post $post)
     {
         $user = Auth::user();
         if (isset($user)) {
-            $post->delete();
-            return response($post,202);
-        }
-        return response($user,400);
+            if ($user->IsAdmin() or $user->IsCreator($post)) {
+                $post->delete();
+                return response($post, 202);
+            } else {
+                return response()->json([
+                    'message' => "No permission",
+                ], 422);
+            }
+        } return response($user,400);
     }
 }

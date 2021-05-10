@@ -27,7 +27,8 @@ class UserController extends Controller
 
             return [
                 'token' => $user->api_token,
-                'username' => $user->name
+                'username' => $user->name,
+                'IsAdmin' => $user->IsAdmin,
             ];
         }
 
