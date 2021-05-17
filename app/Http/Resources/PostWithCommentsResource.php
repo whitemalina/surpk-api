@@ -14,15 +14,27 @@ class PostWithCommentsResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            'id' => $this->id,
-            'sp' => $this->sp,
-            'cab' => $this->cab,
-            'status' => $this->status,
-            'text' => $this->text,
-            'user' => $this->user->name,
-//            'comments' => CommentsResource::collection($this->comments),
-            'created_at' => $this->created_at,
-        ];
+        if ($this->master != null) {
+            return [
+                'id' => $this->id,
+                'sp' => $this->sp,
+                'cab' => $this->cab,
+                'text' => $this->text,
+                'user' => $this->user->name,
+                'master' => $this->master->name,
+                'status' => $this->status,
+                'created_at' => $this->created_at,
+            ];
+        } else {
+            return [
+                'id' => $this->id,
+                'sp' => $this->sp,
+                'cab' => $this->cab,
+                'text' => $this->text,
+                'user' => $this->user->name,
+                'status' => $this->status,
+                'created_at' => $this->created_at,
+            ];
+        }
     }
 }
