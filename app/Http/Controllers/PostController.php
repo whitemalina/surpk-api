@@ -33,6 +33,10 @@ class PostController extends Controller
             if ($user->IsAdmin()) {
                 return PostResource::collection(Post::all());
             } else {
+                if ($user->IsMaster()){
+                    return PostResource::collection(Post::all());
+                }
+
                 return PostResource::collection(Auth::user()->posts);
             }
         } return PostResource::collection(Post::all());
@@ -74,10 +78,28 @@ class PostController extends Controller
     {
         $user = Auth::user();
         if (isset($user)) {
-            $post->update($request->only('status'));
-            return response($post,202);
+            if ($user->IsMaster()) {
+                if ($post->master_id == null) {
+                    $post->update($request->only('status'));
+                    $post->update(['master_id' => $user->id()]);
+                    return response($post, 202);
+                } else {
+                    if ($post->master_id == $user->id()){
+                        $post->update($request->only('status'));
+                        return response($post, 202);
+                    } else {
+                        return response()->json([
+                            'message' => "Уже принято",
+                        ], 422);
+                    }
+                }
+            } else {
+                return response()->json([
+                    'message' => "No permission",
+                ], 422);
+            }
         }
-        return response($user,400);
+        return response($user,422);
 
     }
 

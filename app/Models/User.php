@@ -55,6 +55,14 @@ class User extends Authenticatable
             return false;
         }
     }
+    public function IsMaster()
+    {
+        if ($this->IsMaster) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     public function IsCreator($post){
         if ($this->id == $post->user_id) {
             return true;
@@ -63,7 +71,10 @@ class User extends Authenticatable
         }
 
     }
-
+    public function Id()
+    {
+        return $this->id;
+    }
     public function posts()
     {
         return $this->hasMany(Post::class);
