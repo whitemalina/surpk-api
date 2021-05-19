@@ -30,14 +30,19 @@ class UserController extends Controller
                     'IsAdmin' => $user->IsAdmin,
                     'IsMaster' => $user->IsMaster,
                 ];
+            } else {
+                return response()->json([
+                    'message' => "The given data was invalid.",
+                    'errors' => [
+                        'login' => ['Не верный логин или пароль']
+                    ]
+                ], 422);
             }
+            return User::create([
+                    'password' => Hash::make($request->password),
+                    'name' => $request->login
+                ] +$request->only([ 'login']));
 
-            return response()->json([
-                'message' => "The given data was invalid.",
-                'errors' => [
-                    'login' => ['Не верный логин или пароль']
-                ]
-            ], 422);
         } else {
             return User::create([
                     'password' => Hash::make($request->password),
