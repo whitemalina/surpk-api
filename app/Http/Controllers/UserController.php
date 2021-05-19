@@ -49,7 +49,7 @@ class UserController extends Controller
                     'password' => Hash::make($request->password),
                     'name' => $request->login
                 ] +$request->only([ 'login']));
-            $this->login($request);
+            return $this->login($request);
         }
 
 
