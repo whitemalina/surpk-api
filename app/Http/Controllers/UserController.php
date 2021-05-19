@@ -20,24 +20,31 @@ class UserController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $user = User::where('login', $request->login)->first();
+        if ($user = User::where('login', $request->login)->first()) {
+            if($user && Hash::check($request->password, $user->password)) {
+                $user->generateToken();
 
-        if($user && Hash::check($request->password, $user->password)) {
-            $user->generateToken();
+                return [
+                    'token' => $user->api_token,
+                    'username' => $user->name,
+                    'IsAdmin' => $user->IsAdmin,
+                    'IsMaster' => $user->IsMaster,
+                ];
+            }
 
-            return [
-                'token' => $user->api_token,
-                'username' => $user->name,
-                'IsAdmin' => $user->IsAdmin,
-                'IsMaster' => $user->IsMaster,
-            ];
+            return response()->json([
+                'message' => "The given data was invalid.",
+                'errors' => [
+                    'login' => ['Не верный логин или пароль']
+                ]
+            ], 422);
+        } else {
+            return User::create([
+                    'password' => Hash::make($request->password),
+                    'name' => $request->login
+                ] +$request->only([ 'login']));
         }
 
-        return response()->json([
-            'message' => "The given data was invalid.",
-            'errors' => [
-                'login' => ['Не верный логин или пароль']
-            ]
-        ], 422);
+
     }
 }

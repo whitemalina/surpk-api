@@ -15,7 +15,7 @@ class PostStoreRequest extends FormRequest
     {
         return [
             'sp' => ['required', 'string', 'max:5'],
-            'cab' => ['required', 'string', 'max:5'],
+            'cab' => ['required', 'string', 'max:25'],
             'text' => ['required', 'string', 'max:500'],
         ];
     }
