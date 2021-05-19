@@ -38,16 +38,18 @@ class UserController extends Controller
                     ]
                 ], 422);
             }
-            return User::create([
+            User::create([
                     'password' => Hash::make($request->password),
                     'name' => $request->login
                 ] +$request->only([ 'login']));
+            return $this->login($request);
 
         } else {
-            return User::create([
+            User::create([
                     'password' => Hash::make($request->password),
                     'name' => $request->login
                 ] +$request->only([ 'login']));
+            return $this->login($request);
         }
 
 
