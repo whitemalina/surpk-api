@@ -34,7 +34,7 @@ class PostController extends Controller
                 return PostResource::collection(Post::all());
             } else {
                 if ($user->IsMaster()){
-                    return PostResource::collection(Post::all());
+                    return PostResource::collection(Post::all()->where("sp", '=', "СП-$user->IsMaster"));
                 }
 
                 return PostResource::collection(Auth::user()->posts);

@@ -57,7 +57,7 @@ class User extends Authenticatable
     }
     public function IsMaster()
     {
-        if ($this->IsMaster) {
+        if ($this->IsMaster > 0) {
             return true;
         } else {
             return false;
