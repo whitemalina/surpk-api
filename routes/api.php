@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login']);
-
+Route::patch('update', [UserController::class, 'update']);
 Route::get('my-post', [PostController::class, 'userPosts']);
 
 Route::apiResource('post', PostController::class);

@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'login',
         'password',
+        'contact'
     ];
 
     /**
@@ -79,4 +80,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class);
     }
+//    public function update($request){
+//        return $this->update($request);
+//    }
 }
