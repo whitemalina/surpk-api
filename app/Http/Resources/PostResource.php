@@ -15,7 +15,7 @@ class PostResource extends JsonResource
     public function toArray($request)
     {
         if ($this->master != null) {
-            if ($this->master->contact != null) {
+            if ($this->user->contact != null) {
                 return [
                     'id' => $this->id,
                     'sp' => $this->sp,
@@ -23,7 +23,7 @@ class PostResource extends JsonResource
                     'text' => $this->text,
                     'user' => $this->user->name,
                     'master' => $this->master->name,
-                    'contact' => $this->master->contact,
+                    'contact' => $this->user->contact,
                     'status' => $this->status,
                     'created_at' => $this->created_at,
                 ];
