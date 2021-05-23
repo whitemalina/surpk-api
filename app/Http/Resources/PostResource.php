@@ -15,16 +15,30 @@ class PostResource extends JsonResource
     public function toArray($request)
     {
         if ($this->master != null) {
-            return [
-                'id' => $this->id,
-                'sp' => $this->sp,
-                'cab' => $this->cab,
-                'text' => $this->text,
-                'user' => $this->user->name,
-                'master' => $this->master->name,
-                'status' => $this->status,
-                'created_at' => $this->created_at,
-            ];
+            if ($this->master->contact != null) {
+                return [
+                    'id' => $this->id,
+                    'sp' => $this->sp,
+                    'cab' => $this->cab,
+                    'text' => $this->text,
+                    'user' => $this->user->name,
+                    'master' => $this->master->name,
+                    'contact' => $this->master->contact,
+                    'status' => $this->status,
+                    'created_at' => $this->created_at,
+                ];
+            } else {
+                return [
+                    'id' => $this->id,
+                    'sp' => $this->sp,
+                    'cab' => $this->cab,
+                    'text' => $this->text,
+                    'user' => $this->user->name,
+                    'master' => $this->master->name,
+                    'status' => $this->status,
+                    'created_at' => $this->created_at,
+                ];
+            }
         } else {
             return [
                 'id' => $this->id,

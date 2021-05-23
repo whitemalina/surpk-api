@@ -6,16 +6,32 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api')->only(['update']);
+    }
     public function register(RegisterRequest $request)
     {
         return User::create([
             'password' => Hash::make($request->password)
         ] +$request->only(['name', 'login']));
+    }
+    public function update(Request $request){
+        $user = Auth::user();
+        if (isset($user)) {
+            $user->update($request->all());
+            return response($user, 202);
+        }
+            return response()->json([
+                'message' => "No permission",
+            ], 422);
+
     }
 
     public function login(LoginRequest $request)
